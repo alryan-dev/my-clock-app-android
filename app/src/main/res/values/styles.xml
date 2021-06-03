@@ -3,4 +3,43 @@
     <style name="MyToolbarStyle" parent="Widget.MaterialComponents.Toolbar">
         <item name="titleTextColor">@android:color/white</item>
     </style>
+
+    <style name="MyToolbarNavigationButtonStyle" parent="Widget.AppCompat.Toolbar.Button.Navigation">
+        <item name="tint">@android:color/white</item>
+    </style>
+
+    <style name="FormFieldLayoutStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">60dp</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:padding">16dp</item>
+        <item name="android:background">?android:selectableItemBackground</item>
+        <item name="android:weightSum">2</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+    </style>
+
+    <style name="FormFieldTextStyle">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="FormFieldTextStyle.Label">
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="FormFieldTextStyle.Value">
+        <item name="android:gravity">end</item>
+    </style>
+
+    <style name="MyDividerStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1dp</item>
+        <item name="android:layout_marginStart">16dp</item>
+        <item name="android:layout_marginEnd">16dp</item>
+        <item name="android:background">?android:attr/listDivider</item>
+    </style>
 </resources>

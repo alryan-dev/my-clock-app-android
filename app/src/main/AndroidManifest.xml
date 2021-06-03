@@ -11,6 +11,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MyClock">
+        <activity android:name=".activities.AlarmFormActivity">
+        </activity>
         <activity android:name=".activities.AlarmsActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

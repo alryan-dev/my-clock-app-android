@@ -1,7 +1,14 @@
 package com.example.myclock.activities
 
-import androidx.appcompat.app.AppCompatActivity
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -46,5 +53,34 @@ class AlarmsActivity : AppCompatActivity() {
 
         alarmsRvAdapter = AlarmsRvAdapter(alarmsList)
         rvAlarms.adapter = alarmsRvAdapter
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        val inflater: MenuInflater = menuInflater
+        inflater.inflate(R.menu.menu_alarms, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
+        R.id.action_add -> {
+            val startForResult =
+                registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+                    if (result.resultCode == Activity.RESULT_OK) {
+                        val data = result.data
+                        if (data != null) {
+                            val alarm = data.getParcelableExtra<Alarm>("ALARM")
+                            alarm?.let {
+                                alarmsList.add(it)
+                                alarmsRvAdapter.notifyDataSetChanged()
+                            }
+                        }
+                    }
+                }
+
+            val intent = Intent(this, AlarmFormActivity::class.java)
+            startForResult.launch(intent)
+            true
+        }
+        else -> super.onOptionsItemSelected(item)
     }
 }

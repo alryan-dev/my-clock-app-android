@@ -2,4 +2,10 @@
     <string name="app_name">My Clock</string>
     <string name="placeholder_time">12:00 am</string>
     <string name="label_alarm_label">Label</string>
+    <string name="label_add_alarm">Add Alarm</string>
+    <string name="label_cancel">Cancel</string>
+    <string name="label_save">Save</string>
+    <string name="label_label">Label</string>
+    <string name="placeholder_alarm_label">Alarm</string>
+    <string name="label_vibrate">Vibrate</string>
 </resources>

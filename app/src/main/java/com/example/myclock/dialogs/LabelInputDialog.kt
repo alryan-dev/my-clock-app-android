@@ -1,35 +1,37 @@
-package com.example.myclock.dialogfragments
+package com.example.myclock.dialogs
 
 import android.app.Dialog
+import android.content.DialogInterface
 import android.os.Bundle
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.activityViewModels
 import com.example.myclock.R
-import com.example.myclock.Utility
-import com.example.myclock.interfaces.DialogButtonsListener
+import com.example.myclock.utilities.Utility
+import com.example.myclock.viewmodels.AlarmFormViewModel
 
 class LabelInputDialog : DialogFragment() {
-    private lateinit var dialogButtonsListener: DialogButtonsListener
-
-    fun setDialogButtonsListener(dialogButtonsListener: DialogButtonsListener) {
-        this.dialogButtonsListener = dialogButtonsListener
-    }
+    private val alarmFormViewModel: AlarmFormViewModel by activityViewModels()
+    lateinit var dialogInterface: DialogInterface
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        val alarm = alarmFormViewModel.alarmLiveData.value
+        val view = layoutInflater.inflate(R.layout.dialog_field_input, null)
+        val etLabel = view.findViewById<EditText>(R.id.etLabel)
+        etLabel.setText(alarm?.label)
+
         return activity?.let {
             val builder = AlertDialog.Builder(it)
-            val view = layoutInflater.inflate(R.layout.dialog_field_input, null)
 
             builder.setTitle("Label")
                 .setView(view)
-                .setPositiveButton("OK") { dialog, id ->
-                    val label = view.findViewById<EditText>(R.id.etLabel).text.toString()
-                    dialogButtonsListener.onDialogPositiveClick(label)
+                .setPositiveButton("OK") { _, _ ->
+                    alarm?.label = etLabel.text.toString()
                 }
-                .setNegativeButton("CANCEL") { dialog, id -> }
+                .setNegativeButton("CANCEL", null)
 
             builder.create()
         } ?: throw IllegalStateException("Activity cannot be null")
@@ -45,5 +47,10 @@ class LabelInputDialog : DialogFragment() {
         // Show keyboard
         window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
         Utility.showKeyboard(context, dialog?.findViewById(R.id.etLabel))
+    }
+
+    override fun onDismiss(dialog: DialogInterface) {
+        super.onDismiss(dialog)
+        dialogInterface.dismiss()
     }
 }

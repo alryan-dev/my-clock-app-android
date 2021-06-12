@@ -20,6 +20,19 @@ import java.util.*
 class AlarmsActivity : AppCompatActivity() {
     private val alarmsList = mutableListOf<Alarm>()
     private lateinit var alarmsRvAdapter: AlarmsRvAdapter
+    private val startForResult =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val data = result.data
+                if (data != null) {
+                    val alarm = data.getParcelableExtra<Alarm>("ALARM")
+                    alarm?.let {
+                        alarmsList.add(it)
+                        alarmsRvAdapter.notifyDataSetChanged()
+                    }
+                }
+            }
+        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,17 +50,14 @@ class AlarmsActivity : AppCompatActivity() {
         rvAlarms.addItemDecoration(DividerItemDecoration(this, LinearLayoutManager.VERTICAL))
 
         val alarm1 = Alarm()
-        alarm1.time = Date()
         alarm1.label = "Alarm 1"
         alarmsList.add(alarm1)
 
         val alarm2 = Alarm()
-        alarm2.time = Date()
         alarm2.label = "Alarm 2"
         alarmsList.add(alarm2)
 
         val alarm3 = Alarm()
-        alarm3.time = Date()
         alarm3.label = "Alarm 3"
         alarmsList.add(alarm3)
 
@@ -63,20 +73,6 @@ class AlarmsActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
         R.id.action_add -> {
-            val startForResult =
-                registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
-                    if (result.resultCode == Activity.RESULT_OK) {
-                        val data = result.data
-                        if (data != null) {
-                            val alarm = data.getParcelableExtra<Alarm>("ALARM")
-                            alarm?.let {
-                                alarmsList.add(it)
-                                alarmsRvAdapter.notifyDataSetChanged()
-                            }
-                        }
-                    }
-                }
-
             val intent = Intent(this, AlarmFormActivity::class.java)
             startForResult.launch(intent)
             true

@@ -8,4 +8,23 @@
     <string name="label_label">Label</string>
     <string name="placeholder_alarm_label">Alarm</string>
     <string name="label_vibrate">Vibrate</string>
+    <string name="label_time">Time</string>
+    <string name="label_repeat">Repeat</string>
+    <string name="placeholder_repeat">Only ring once</string>
+    <string name="label_ring_duration">Ring Duration</string>
+    <string name="placeholder_ring_duration">5 minutes</string>
+    <string name="label_snooze_duration">Snooze Duration</string>
+    <string name="placeholder_snooze_duration">10 minutes, 3x</string>
+    <string name="label_sound">Sound</string>
+    <string name="placeholder_sound">Alarm Beep</string>
+    <string name="label_snooze_duration_min">Snooze duration (min)</string>
+    <string name="label_5">5</string>
+    <string name="label_10">10</string>
+    <string name="label_15">15</string>
+    <string name="label_20">20</string>
+    <string name="label_25">25</string>
+    <string name="label_30">30</string>
+    <string name="label_number_of_snoozes">Number of snoozes</string>
+    <string name="label_1">1</string>
+    <string name="label_3">3</string>
 </resources>

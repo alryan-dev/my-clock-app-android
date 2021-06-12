@@ -27,6 +27,69 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tbAlarmForm">
 
+        <!-- Time Field -->
+        <LinearLayout
+            android:id="@+id/llTimeField"
+            style="@style/FormFieldLayoutStyle">
+            <TextView
+                style="@style/FormFieldTextStyle.Label"
+                android:text="@string/label_time" />
+            <TextView
+                android:id="@+id/tvTime"
+                style="@style/FormFieldTextStyle.Value"
+                android:text="@string/placeholder_time" />
+        </LinearLayout>
+
+        <View style="@style/MyDividerStyle" />
+
+        <!-- Repeat Field -->
+        <LinearLayout
+            android:id="@+id/llRepeatField"
+            style="@style/FormFieldLayoutStyle">
+            <TextView
+                style="@style/FormFieldTextStyle.Label"
+                android:text="@string/label_repeat" />
+            <TextView
+                android:id="@+id/tvRepeat"
+                style="@style/FormFieldTextStyle.Value"
+                android:text="@string/placeholder_repeat" />
+        </LinearLayout>
+
+        <View style="@style/MyDividerStyle" />
+
+        <!-- Sound Field -->
+        <LinearLayout
+            android:id="@+id/llSoundField"
+            style="@style/FormFieldLayoutStyle">
+            <TextView
+                style="@style/FormFieldTextStyle.Label"
+                android:text="@string/label_sound" />
+            <TextView
+                android:id="@+id/tvSound"
+                style="@style/FormFieldTextStyle.Value"
+                android:text="@string/placeholder_sound" />
+        </LinearLayout>
+
+        <View style="@style/MyDividerStyle" />
+
+        <!-- Vibrate Field -->
+        <LinearLayout
+            android:id="@+id/llVibrateField"
+            style="@style/FormFieldLayoutStyle"
+            android:weightSum="0">
+            <TextView
+                style="@style/FormFieldTextStyle.Label"
+                android:layout_width="match_parent"
+                android:text="@string/label_vibrate" />
+            <com.google.android.material.switchmaterial.SwitchMaterial
+                android:id="@+id/smVibrate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical" />
+        </LinearLayout>
+
+        <View style="@style/MyDividerStyle" />
+
         <!-- Label Field -->
         <LinearLayout
             android:id="@+id/llLabelField"
@@ -42,17 +105,32 @@
 
         <View style="@style/MyDividerStyle" />
 
-        <!-- Vibrate Field -->
-        <LinearLayout style="@style/FormFieldLayoutStyle">
+        <!-- Ring Duration Field -->
+        <LinearLayout
+            android:id="@+id/llRingDurationField"
+            style="@style/FormFieldLayoutStyle">
             <TextView
                 style="@style/FormFieldTextStyle.Label"
-                android:text="@string/label_vibrate" />
-            <com.google.android.material.switchmaterial.SwitchMaterial
-                android:id="@+id/smVibrate"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="1" />
+                android:text="@string/label_ring_duration" />
+            <TextView
+                android:id="@+id/tvRingDuration"
+                style="@style/FormFieldTextStyle.Value"
+                android:text="@string/placeholder_ring_duration" />
+        </LinearLayout>
+
+        <View style="@style/MyDividerStyle" />
+
+        <!-- Snooze Duration Field -->
+        <LinearLayout
+            android:id="@+id/llSnoozeDurationField"
+            style="@style/FormFieldLayoutStyle">
+            <TextView
+                style="@style/FormFieldTextStyle.Label"
+                android:text="@string/label_snooze_duration" />
+            <TextView
+                android:id="@+id/tvSnoozeDuration"
+                style="@style/FormFieldTextStyle.Value"
+                android:text="@string/placeholder_snooze_duration" />
         </LinearLayout>
 
         <View style="@style/MyDividerStyle" />

@@ -6,9 +6,8 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myclock.R
+import com.example.myclock.utilities.Utility
 import com.example.myclock.models.Alarm
-import java.text.SimpleDateFormat
-import java.util.*
 
 class AlarmsRvAdapter(private val alarmsList: List<Alarm>) :
     RecyclerView.Adapter<AlarmsRvAdapter.ViewHolder>() {
@@ -25,9 +24,7 @@ class AlarmsRvAdapter(private val alarmsList: List<Alarm>) :
     }
 
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
-        SimpleDateFormat("HH:mm a", Locale.getDefault()).let {
-            viewHolder.tvTime.text = it.format(alarmsList[position].time)
-        }
+        viewHolder.tvTime.text = Utility.timeToString(alarmsList[position].time)
         viewHolder.tvLabel.text = alarmsList[position].label
     }
 

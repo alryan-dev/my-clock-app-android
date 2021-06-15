@@ -8,6 +8,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -15,11 +16,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.myclock.R
 import com.example.myclock.adapters.AlarmsRvAdapter
 import com.example.myclock.models.Alarm
-import java.util.*
+import com.example.myclock.viewmodels.AlarmsViewModel
 
 class AlarmsActivity : AppCompatActivity() {
-    private val alarmsList = mutableListOf<Alarm>()
+    private var alarmsList = mutableListOf<Alarm>()
     private lateinit var alarmsRvAdapter: AlarmsRvAdapter
+    private val alarmsViewModel: AlarmsViewModel by viewModels()
     private val startForResult =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
             if (result.resultCode == Activity.RESULT_OK) {
@@ -37,31 +39,25 @@ class AlarmsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_alarms)
-        initAlarms()
+        initAlarmsRecyclerView()
+        alarmsViewModel.alarmsLiveData.observe(this, {
+            alarmsList.addAll(it)
+            alarmsRvAdapter.notifyDataSetChanged()
+        })
 
         // Init toolbar
         setSupportActionBar(findViewById(R.id.tbAlarms))
         supportActionBar?.title = "Alarms"
     }
 
-    private fun initAlarms() {
+    private fun initAlarmsRecyclerView() {
+        // Init recyclerview
         val rvAlarms = findViewById<RecyclerView>(R.id.rvAlarms)
         rvAlarms.layoutManager = LinearLayoutManager(this)
         rvAlarms.addItemDecoration(DividerItemDecoration(this, LinearLayoutManager.VERTICAL))
 
-        val alarm1 = Alarm()
-        alarm1.label = "Alarm 1"
-        alarmsList.add(alarm1)
-
-        val alarm2 = Alarm()
-        alarm2.label = "Alarm 2"
-        alarmsList.add(alarm2)
-
-        val alarm3 = Alarm()
-        alarm3.label = "Alarm 3"
-        alarmsList.add(alarm3)
-
-        alarmsRvAdapter = AlarmsRvAdapter(alarmsList)
+        // Init adapter
+        alarmsRvAdapter = AlarmsRvAdapter(this, alarmsList, alarmsViewModel)
         rvAlarms.adapter = alarmsRvAdapter
     }
 

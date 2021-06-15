@@ -36,10 +36,7 @@ class AlarmFormActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_alarm_form)
         alarm = intent.getParcelableExtra("ALARM") ?: Alarm()
-        alarmFormViewModel.alarmLiveData.observe(this, {
-            alarm = it
-            Utility.print(Gson().toJson(alarm))
-        })
+        alarmFormViewModel.alarmLiveData.observe(this, { alarm = it })
 
         initToolbar()
         initTimeField()

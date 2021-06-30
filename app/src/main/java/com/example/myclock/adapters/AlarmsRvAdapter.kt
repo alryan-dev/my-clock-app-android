@@ -24,24 +24,24 @@ class AlarmsRvAdapter(
     private val alarmsViewModel: AlarmsViewModel
 ) :
     RecyclerView.Adapter<AlarmsRvAdapter.ViewHolder>() {
-    private val startForResult =
-        (context as ComponentActivity).registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
-            if (result.resultCode == Activity.RESULT_OK) {
-                val data = result.data
-                if (data != null) {
-                    val alarm = data.getParcelableExtra<Alarm>("ALARM")
-                    alarm?.let { it1 ->
-                        editPosition?.let {
-                            alarmsViewModel.alarmsLiveData.value?.let { it2 ->
-                                it2[it] = it1
-                                alarmsList = it2
-                                notifyDataSetChanged()
-                            }
-                        }
-                    }
-                }
-            }
-        }
+    // private val startForResult =
+    //     (context as ComponentActivity).registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+    //         if (result.resultCode == Activity.RESULT_OK) {
+    //             val data = result.data
+    //             if (data != null) {
+    //                 val alarm = data.getParcelableExtra<Alarm>("ALARM")
+    //                 alarm?.let { it1 ->
+    //                     editPosition?.let {
+    //                         alarmsViewModel.alarmsLiveData.value?.let { it2 ->
+    //                             it2[it] = it1
+    //                             alarmsList = it2
+    //                             notifyDataSetChanged()
+    //                         }
+    //                     }
+    //                 }
+    //             }
+    //         }
+    //     }
     private var editPosition: Int? = null
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -60,10 +60,10 @@ class AlarmsRvAdapter(
         viewHolder.tvLabel.text = alarmsList[position].label
 
         viewHolder.itemView.setOnClickListener {
-            editPosition = position
-            val intent = Intent(context, AlarmFormActivity::class.java)
-            intent.putExtra("ALARM", alarmsList[position])
-            startForResult.launch(intent)
+            // editPosition = position
+            // val intent = Intent(context, AlarmFormActivity::class.java)
+            // intent.putExtra("ALARM", alarmsList[position])
+            // startForResult.launch(intent)
         }
     }
 

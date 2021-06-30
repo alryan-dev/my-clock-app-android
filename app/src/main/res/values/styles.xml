@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="MyToolbarStyle" parent="Widget.MaterialComponents.Toolbar">
-        <item name="titleTextColor">@android:color/white</item>
+    <!--<style name="MyToolbarStyle" parent="Widget.MaterialComponents.Toolbar">-->
+    <style name="MyToolbarStyle" parent="ThemeOverlay.MaterialComponents.Toolbar.Primary">
+        <!--<item name="titleTextColor">@android:color/white</item>-->
+        <!--<item name="iconTint">@android:color/white</item>-->
+        <item name="colorOnPrimary">@android:color/white</item>
     </style>
 
     <style name="MyToolbarNavigationButtonStyle" parent="Widget.AppCompat.Toolbar.Button.Navigation">

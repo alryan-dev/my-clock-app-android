@@ -27,4 +27,6 @@
     <string name="label_number_of_snoozes">Number of snoozes</string>
     <string name="label_1">1</string>
     <string name="label_3">3</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

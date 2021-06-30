@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/alarmsFragment">
+
+    <fragment
+        android:id="@+id/alarmsFragment"
+        android:name="com.example.myclock.fragments.AlarmsFragment"
+        android:label="Alarms"
+        tools:layout="@layout/fragment_alarms">
+
+        <action
+            android:id="@+id/action_alarmsFragment_to_alarmFormFragment"
+            app:destination="@id/alarmFormFragment" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/alarmFormFragment"
+        android:name="com.example.myclock.fragments.AlarmFormFragment"
+        android:label="Add Alarm"
+        tools:layout="@layout/fragment_alarm_form" />
+
+</navigation>

@@ -9,16 +9,15 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import com.example.myclock.R
 import com.example.myclock.utilities.SnoozeUtils
-import com.example.myclock.utilities.Utility
-import com.example.myclock.viewmodels.AlarmFormViewModel
+import com.example.myclock.viewmodels.AlarmsViewModel
 import com.google.android.material.slider.Slider
 
 class SnoozeInputDialog : DialogFragment() {
-    private val alarmFormViewModel: AlarmFormViewModel by activityViewModels()
+    private val alarmsViewModel: AlarmsViewModel by activityViewModels()
     lateinit var dialogInterface: DialogInterface
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val alarm = alarmFormViewModel.alarmLiveData.value
+        val alarm = alarmsViewModel.alarmLiveData.value
         val view = layoutInflater.inflate(R.layout.dialog_snooze_input, null)
         val sSnoozeDuration = view.findViewById<Slider>(R.id.sSnoozeDuration)
         val sNoOfSnoozes = view.findViewById<Slider>(R.id.sNoOfSnoozes)
@@ -34,7 +33,7 @@ class SnoozeInputDialog : DialogFragment() {
                 .setPositiveButton("OK") { _, _ ->
                     alarm?.snoozeDuration = SnoozeUtils.getSnoozeDurationValue(sSnoozeDuration.value)
                     alarm?.noOfSnoozes = SnoozeUtils.getNoOfSnoozesValue(sNoOfSnoozes.value)
-                    alarmFormViewModel.alarmLiveData.value = alarm
+                    alarmsViewModel.alarmLiveData.value = alarm
                 }
                 .setNegativeButton("CANCEL", null)
 

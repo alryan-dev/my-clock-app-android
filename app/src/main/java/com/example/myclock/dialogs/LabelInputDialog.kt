@@ -11,14 +11,14 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import com.example.myclock.R
 import com.example.myclock.utilities.Utility
-import com.example.myclock.viewmodels.AlarmFormViewModel
+import com.example.myclock.viewmodels.AlarmsViewModel
 
 class LabelInputDialog : DialogFragment() {
-    private val alarmFormViewModel: AlarmFormViewModel by activityViewModels()
+    private val alarmsViewModel: AlarmsViewModel by activityViewModels()
     lateinit var dialogInterface: DialogInterface
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val alarm = alarmFormViewModel.alarmLiveData.value
+        val alarm = alarmsViewModel.alarmLiveData.value
         val view = layoutInflater.inflate(R.layout.dialog_field_input, null)
         val etLabel = view.findViewById<EditText>(R.id.etLabel)
         etLabel.setText(alarm?.label)

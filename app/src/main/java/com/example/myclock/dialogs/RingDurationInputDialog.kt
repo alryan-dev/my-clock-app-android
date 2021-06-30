@@ -8,14 +8,14 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import com.example.myclock.utilities.Utility
-import com.example.myclock.viewmodels.AlarmFormViewModel
+import com.example.myclock.viewmodels.AlarmsViewModel
 
 class RingDurationInputDialog : DialogFragment() {
-    private val alarmFormViewModel: AlarmFormViewModel by activityViewModels()
+    private val alarmsViewModel: AlarmsViewModel by activityViewModels()
     lateinit var dialogInterface: DialogInterface
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val alarm = alarmFormViewModel.alarmLiveData.value
+        val alarm = alarmsViewModel.alarmLiveData.value
         val checkedItem = when (alarm?.ringDuration) {
             1 -> 0
             5 -> 1

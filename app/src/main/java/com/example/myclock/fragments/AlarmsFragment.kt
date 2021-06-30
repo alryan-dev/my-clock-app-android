@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.navigation.Navigation.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -28,6 +27,7 @@ class AlarmsFragment : Fragment() {
         setHasOptionsMenu(true)
 
         alarmsViewModel.alarmsLiveData.observe(viewLifecycleOwner, {
+            alarmsList.clear()
             alarmsList.addAll(it)
             alarmsRvAdapter.notifyDataSetChanged()
         })
@@ -43,7 +43,7 @@ class AlarmsFragment : Fragment() {
 
         // Init adapter
         context?.let {
-            alarmsRvAdapter = AlarmsRvAdapter(it, alarmsList, alarmsViewModel)
+            alarmsRvAdapter = AlarmsRvAdapter(alarmsList)
             rvAlarms.adapter = alarmsRvAdapter
         }
     }

@@ -22,6 +22,11 @@
         android:id="@+id/alarmFormFragment"
         android:name="com.example.myclock.fragments.AlarmFormFragment"
         android:label="Add Alarm"
-        tools:layout="@layout/fragment_alarm_form" />
+        tools:layout="@layout/fragment_alarm_form" >
+        <argument
+            android:name="alarmId"
+            app:argType="integer"
+            android:defaultValue="0" />
+    </fragment>
 
 </navigation>

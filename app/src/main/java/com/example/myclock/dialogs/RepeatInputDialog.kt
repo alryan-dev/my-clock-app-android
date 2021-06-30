@@ -9,14 +9,14 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import com.example.myclock.models.Alarm
 import com.example.myclock.utilities.Utility
-import com.example.myclock.viewmodels.AlarmFormViewModel
+import com.example.myclock.viewmodels.AlarmsViewModel
 
 class RepeatInputDialog : DialogFragment() {
-    private val alarmFormViewModel: AlarmFormViewModel by activityViewModels()
+    private val alarmsViewModel: AlarmsViewModel by activityViewModels()
     lateinit var dialogInterface: DialogInterface
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val alarm = Alarm.copy(alarmFormViewModel.alarmLiveData.value)
+        val alarm = Alarm.copy(alarmsViewModel.alarmLiveData.value)
 
         return activity?.let {
             val builder = AlertDialog.Builder(it)
@@ -29,7 +29,7 @@ class RepeatInputDialog : DialogFragment() {
                     alarm.repeat[which] = isChecked
                 }
                 .setPositiveButton("OK") { _, _ ->
-                    alarmFormViewModel.alarmLiveData.value = alarm
+                    alarmsViewModel.alarmLiveData.value = alarm
                 }
                 .setNegativeButton("CANCEL", null)
 

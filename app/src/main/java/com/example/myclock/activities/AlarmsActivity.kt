@@ -57,7 +57,6 @@ class AlarmsActivity : AppCompatActivity() {
         rvAlarms.addItemDecoration(DividerItemDecoration(this, LinearLayoutManager.VERTICAL))
 
         // Init adapter
-        alarmsRvAdapter = AlarmsRvAdapter(this, alarmsList, alarmsViewModel)
         rvAlarms.adapter = alarmsRvAdapter
     }
 

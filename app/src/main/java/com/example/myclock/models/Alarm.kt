@@ -1,13 +1,16 @@
 package com.example.myclock.models
 
 import android.os.Parcelable
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.google.gson.Gson
 import kotlinx.parcelize.Parcelize
 import java.util.*
 
 @Parcelize
+@Entity
 class Alarm(
-    var id: Int = 0,
+    @PrimaryKey(autoGenerate = true) val id: Int = 0,
     var time: Calendar = Calendar.getInstance(),
     var vibrate: Boolean = false,
     var label: String = "Alarm",

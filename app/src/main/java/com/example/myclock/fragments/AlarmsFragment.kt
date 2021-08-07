@@ -11,9 +11,12 @@ import com.example.myclock.R
 import com.example.myclock.adapters.AlarmsRvAdapter
 import com.example.myclock.models.Alarm
 import com.example.myclock.viewmodels.AlarmsViewModel
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class AlarmsFragment : Fragment() {
-    private lateinit var alarmsRvAdapter: AlarmsRvAdapter
+    @Inject lateinit var alarmsRvAdapter: AlarmsRvAdapter
     private val alarmsViewModel: AlarmsViewModel by activityViewModels()
     private var alarmsList = mutableListOf<Alarm>()
 
@@ -23,7 +26,7 @@ class AlarmsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_alarms, container, false)
-        initAlarmsRecyclerView(view)
+        setUpAlarmsRecyclerView(view)
         setHasOptionsMenu(true)
 
         alarmsViewModel.alarmsLiveData.observe(viewLifecycleOwner, {
@@ -35,15 +38,15 @@ class AlarmsFragment : Fragment() {
         return view
     }
 
-    private fun initAlarmsRecyclerView(view: View) {
-        // Init recyclerview layout
+    private fun setUpAlarmsRecyclerView(view: View) {
+        // Set up recyclerview
         val rvAlarms = view.findViewById<RecyclerView>(R.id.rvAlarms)
         rvAlarms.layoutManager = LinearLayoutManager(context)
         rvAlarms.addItemDecoration(DividerItemDecoration(context, LinearLayoutManager.VERTICAL))
 
-        // Init adapter
+        // Set up adapter
         context?.let {
-            alarmsRvAdapter = AlarmsRvAdapter(alarmsList)
+            alarmsRvAdapter.alarmsList = alarmsList
             rvAlarms.adapter = alarmsRvAdapter
         }
     }

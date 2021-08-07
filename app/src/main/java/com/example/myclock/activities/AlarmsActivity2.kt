@@ -11,7 +11,9 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.onNavDestinationSelected
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.example.myclock.R
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class AlarmsActivity2 : AppCompatActivity() {
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var navController: NavController
@@ -19,10 +21,10 @@ class AlarmsActivity2 : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_alarms2)
-        initAppBar()
+        setUpAppBar()
     }
 
-    private fun initAppBar() {
+    private fun setUpAppBar() {
         val tbAlarms = findViewById<Toolbar>(R.id.tbAlarms)
         setSupportActionBar(tbAlarms)
 

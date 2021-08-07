@@ -10,11 +10,12 @@ import com.example.myclock.R
 import com.example.myclock.fragments.AlarmsFragmentDirections
 import com.example.myclock.models.Alarm
 import com.example.myclock.utilities.Utility
+import javax.inject.Inject
 
-class AlarmsRvAdapter(
-    private var alarmsList: List<Alarm>,
-) :
+class AlarmsRvAdapter @Inject constructor() :
     RecyclerView.Adapter<AlarmsRvAdapter.ViewHolder>() {
+
+    var alarmsList: List<Alarm> = emptyList()
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val tvTime: TextView = view.findViewById(R.id.tvTime)

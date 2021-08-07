@@ -16,7 +16,7 @@ class RepeatInputDialog : DialogFragment() {
     lateinit var dialogInterface: DialogInterface
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val alarm = Alarm.copy(alarmsViewModel.alarmLiveData.value)
+        val alarm = Alarm.copy(alarmsViewModel.alarmFormLiveData.value)
 
         return activity?.let {
             val builder = AlertDialog.Builder(it)
@@ -29,7 +29,7 @@ class RepeatInputDialog : DialogFragment() {
                     alarm.repeat[which] = isChecked
                 }
                 .setPositiveButton("OK") { _, _ ->
-                    alarmsViewModel.alarmLiveData.value = alarm
+                    alarmsViewModel.alarmFormLiveData.value = alarm
                 }
                 .setNegativeButton("CANCEL", null)
 

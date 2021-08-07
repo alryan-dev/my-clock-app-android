@@ -2,31 +2,28 @@ package com.example.myclock.viewmodels
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
+import androidx.lifecycle.viewModelScope
 import com.example.myclock.models.Alarm
+import com.example.myclock.repositories.AlarmsRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class AlarmsViewModel : ViewModel() {
-    var alarmsLiveData = MutableLiveData<MutableList<Alarm>>()
-    var alarmLiveData = MutableLiveData<Alarm>()
+@HiltViewModel
+class AlarmsViewModel @Inject constructor(
+    private val alarmsRepository: AlarmsRepository
+) : ViewModel() {
+    var alarmsLiveData = alarmsRepository.load().asLiveData()
+    var alarmFormLiveData = MutableLiveData<Alarm>()
 
     init {
-        alarmLiveData.value = Alarm()
-        val alarmsList = mutableListOf<Alarm>()
+        alarmFormLiveData.value = Alarm()
+    }
 
-        val alarm1 = Alarm()
-        alarm1.id = 1
-        alarm1.label = "Alarm 1"
-        alarmsList.add(alarm1)
-
-        val alarm2 = Alarm()
-        alarm2.id = 2
-        alarm2.label = "Alarm 2"
-        alarmsList.add(alarm2)
-
-        val alarm3 = Alarm()
-        alarm3.id = 3
-        alarm3.label = "Alarm 3"
-        alarmsList.add(alarm3)
-
-        alarmsLiveData.value = alarmsList
+    fun save() {
+        viewModelScope.launch {
+            alarmsRepository.save(alarmFormLiveData.value!!)
+        }
     }
 }

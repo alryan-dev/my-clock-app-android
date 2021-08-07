@@ -21,8 +21,10 @@ import com.example.myclock.viewmodels.AlarmsViewModel
 import com.google.android.material.switchmaterial.SwitchMaterial
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
+import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
 
+@AndroidEntryPoint
 class AlarmFormFragment : Fragment() {
     private val args: AlarmFormFragmentArgs by navArgs()
     private lateinit var alarm: Alarm
@@ -40,8 +42,8 @@ class AlarmFormFragment : Fragment() {
             0 -> Alarm()
             else -> alarmsViewModel.alarmsLiveData.value?.get(args.alarmId - 1) ?: Alarm()
         }
-        alarmsViewModel.alarmLiveData.observe(viewLifecycleOwner, { alarm = it })
-        alarmsViewModel.alarmLiveData.value = alarm
+        alarmsViewModel.alarmFormLiveData.observe(viewLifecycleOwner, { alarm = it })
+        alarmsViewModel.alarmFormLiveData.value = alarm
 
         initTimeField()
         initRepeatField()
@@ -180,14 +182,8 @@ class AlarmFormFragment : Fragment() {
 
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
         R.id.action_save -> {
-            if (alarm.id == 0) {
-                alarm.id = alarmsViewModel.alarmsLiveData.value?.last()?.id!! + 1
-                alarmsViewModel.alarmsLiveData.value?.add(alarm)
-            } else {
-                alarmsViewModel.alarmsLiveData.value?.set(alarm.id - 1, alarm)
-            }
-
-            alarmsViewModel.alarmLiveData.value = Alarm()
+            alarmsViewModel.save()
+            alarmsViewModel.alarmFormLiveData.value = Alarm()
             findNavController().popBackStack()
             true
         }

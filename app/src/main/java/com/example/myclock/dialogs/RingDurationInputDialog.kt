@@ -15,7 +15,7 @@ class RingDurationInputDialog : DialogFragment() {
     lateinit var dialogInterface: DialogInterface
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val alarm = alarmsViewModel.alarmLiveData.value
+        val alarm = alarmsViewModel.alarmFormLiveData.value
         val checkedItem = when (alarm?.ringDuration) {
             1 -> 0
             5 -> 1

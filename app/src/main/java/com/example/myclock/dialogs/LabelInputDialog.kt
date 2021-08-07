@@ -18,7 +18,7 @@ class LabelInputDialog : DialogFragment() {
     lateinit var dialogInterface: DialogInterface
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val alarm = alarmsViewModel.alarmLiveData.value
+        val alarm = alarmsViewModel.alarmFormLiveData.value
         val view = layoutInflater.inflate(R.layout.dialog_field_input, null)
         val etLabel = view.findViewById<EditText>(R.id.etLabel)
         etLabel.setText(alarm?.label)

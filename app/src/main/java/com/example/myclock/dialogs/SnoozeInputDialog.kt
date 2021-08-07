@@ -17,7 +17,7 @@ class SnoozeInputDialog : DialogFragment() {
     lateinit var dialogInterface: DialogInterface
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val alarm = alarmsViewModel.alarmLiveData.value
+        val alarm = alarmsViewModel.alarmFormLiveData.value
         val view = layoutInflater.inflate(R.layout.dialog_snooze_input, null)
         val sSnoozeDuration = view.findViewById<Slider>(R.id.sSnoozeDuration)
         val sNoOfSnoozes = view.findViewById<Slider>(R.id.sNoOfSnoozes)
@@ -33,7 +33,7 @@ class SnoozeInputDialog : DialogFragment() {
                 .setPositiveButton("OK") { _, _ ->
                     alarm?.snoozeDuration = SnoozeUtils.getSnoozeDurationValue(sSnoozeDuration.value)
                     alarm?.noOfSnoozes = SnoozeUtils.getNoOfSnoozesValue(sNoOfSnoozes.value)
-                    alarmsViewModel.alarmLiveData.value = alarm
+                    alarmsViewModel.alarmFormLiveData.value = alarm
                 }
                 .setNegativeButton("CANCEL", null)
 

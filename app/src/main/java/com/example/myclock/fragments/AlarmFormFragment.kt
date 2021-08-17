@@ -8,7 +8,6 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import com.example.myclock.R
 import com.example.myclock.dialogs.LabelInputDialog
 import com.example.myclock.dialogs.RepeatInputDialog
@@ -21,14 +20,14 @@ import com.example.myclock.viewmodels.AlarmsViewModel
 import com.google.android.material.switchmaterial.SwitchMaterial
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
+import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
 
 @AndroidEntryPoint
 class AlarmFormFragment : Fragment() {
-    private val args: AlarmFormFragmentArgs by navArgs()
-    private lateinit var alarm: Alarm
     private val alarmsViewModel: AlarmsViewModel by activityViewModels()
+    private lateinit var alarmForm: Alarm
     private lateinit var fragmentView: View
 
     override fun onCreateView(
@@ -38,12 +37,8 @@ class AlarmFormFragment : Fragment() {
         fragmentView = inflater.inflate(R.layout.fragment_alarm_form, container, false)
         setHasOptionsMenu(true)
 
-        alarm = when (args.alarmId) {
-            0 -> Alarm()
-            else -> alarmsViewModel.alarmsLiveData.value?.get(args.alarmId - 1) ?: Alarm()
-        }
-        alarmsViewModel.alarmFormLiveData.observe(viewLifecycleOwner, { alarm = it })
-        alarmsViewModel.alarmFormLiveData.value = alarm
+        alarmsViewModel.alarmFormLiveData.value?.let { alarmForm = it }
+        alarmsViewModel.alarmFormLiveData.observe(viewLifecycleOwner, { alarmForm = it })
 
         initTimeField()
         initRepeatField()
@@ -57,7 +52,7 @@ class AlarmFormFragment : Fragment() {
 
     private fun initTimeField() {
         val tvTime = fragmentView.findViewById<TextView>(R.id.tvTime)
-        tvTime.text = Utility.timeToString(alarm.time)
+        tvTime.text = Utility.timeToString(alarmForm.time)
 
         val llTimeField = fragmentView.findViewById<LinearLayout>(R.id.llTimeField)
         llTimeField.setOnClickListener {
@@ -65,14 +60,14 @@ class AlarmFormFragment : Fragment() {
                 MaterialTimePicker.Builder()
                     .setTimeFormat(TimeFormat.CLOCK_12H)
                     .setTitleText("Set Time")
-                    .setHour(alarm.time.get(Calendar.HOUR_OF_DAY))
-                    .setMinute(alarm.time.get(Calendar.MINUTE))
+                    .setHour(alarmForm.time.get(Calendar.HOUR_OF_DAY))
+                    .setMinute(alarmForm.time.get(Calendar.MINUTE))
                     .build()
 
             picker.addOnPositiveButtonClickListener {
-                alarm.time.set(Calendar.HOUR_OF_DAY, picker.hour)
-                alarm.time.set(Calendar.MINUTE, picker.minute)
-                tvTime.text = Utility.timeToString(alarm.time)
+                alarmForm.time.set(Calendar.HOUR_OF_DAY, picker.hour)
+                alarmForm.time.set(Calendar.MINUTE, picker.minute)
+                tvTime.text = Utility.timeToString(alarmForm.time)
             }
 
             picker.show(childFragmentManager, "TIME_INPUT_DIALOG")
@@ -81,7 +76,7 @@ class AlarmFormFragment : Fragment() {
 
     private fun initRepeatField() {
         val tvRepeat = fragmentView.findViewById<TextView>(R.id.tvRepeat)
-        tvRepeat.text = Utility.getRepeatLabel(alarm.repeat)
+        tvRepeat.text = Utility.getRepeatLabel(alarmForm.repeat)
 
         val llRepeatField = fragmentView.findViewById<LinearLayout>(R.id.llRepeatField)
         llRepeatField.setOnClickListener {
@@ -90,7 +85,7 @@ class AlarmFormFragment : Fragment() {
                 override fun cancel() {}
 
                 override fun dismiss() {
-                    tvRepeat.text = Utility.getRepeatLabel(alarm.repeat)
+                    tvRepeat.text = Utility.getRepeatLabel(alarmForm.repeat)
                 }
             }
 
@@ -100,7 +95,7 @@ class AlarmFormFragment : Fragment() {
 
     private fun initLabelField() {
         val tvLabel = fragmentView.findViewById<TextView>(R.id.tvLabel)
-        tvLabel.text = alarm.label
+        tvLabel.text = alarmForm.label
 
         val llLabelField = fragmentView.findViewById<LinearLayout>(R.id.llLabelField)
         llLabelField.setOnClickListener {
@@ -111,7 +106,7 @@ class AlarmFormFragment : Fragment() {
                 }
 
                 override fun dismiss() {
-                    tvLabel.text = alarm.label
+                    tvLabel.text = alarmForm.label
                 }
             }
 
@@ -121,20 +116,20 @@ class AlarmFormFragment : Fragment() {
 
     private fun initVibrateField() {
         val smVibrate = fragmentView.findViewById<SwitchMaterial>(R.id.smVibrate)
-        smVibrate.isChecked = alarm.vibrate
+        smVibrate.isChecked = alarmForm.vibrate
         smVibrate.setOnCheckedChangeListener { _, isChecked ->
-            alarm.vibrate = isChecked
+            alarmForm.vibrate = isChecked
         }
 
         val llVibrateField = fragmentView.findViewById<LinearLayout>(R.id.llVibrateField)
         llVibrateField.setOnClickListener {
-            smVibrate.isChecked = !alarm.vibrate
+            smVibrate.isChecked = !alarmForm.vibrate
         }
     }
 
     private fun initRingDurationField() {
         val tvRingDuration = fragmentView.findViewById<TextView>(R.id.tvRingDuration)
-        tvRingDuration.text = Utility.getRingDurationLabel(alarm.ringDuration)
+        tvRingDuration.text = Utility.getRingDurationLabel(alarmForm.ringDuration)
 
         val llRingDurationField = fragmentView.findViewById<LinearLayout>(R.id.llRingDurationField)
         llRingDurationField.setOnClickListener {
@@ -143,7 +138,7 @@ class AlarmFormFragment : Fragment() {
                 override fun cancel() {}
 
                 override fun dismiss() {
-                    tvRingDuration.text = Utility.getRingDurationLabel(alarm.ringDuration)
+                    tvRingDuration.text = Utility.getRingDurationLabel(alarmForm.ringDuration)
                 }
             }
 
@@ -153,8 +148,8 @@ class AlarmFormFragment : Fragment() {
 
     private fun initSnoozeField() {
         val tvSnoozeDuration = fragmentView.findViewById<TextView>(R.id.tvSnoozeDuration)
-        (SnoozeUtils.getSnoozeDurationLabel(alarm.snoozeDuration) + ", " + SnoozeUtils.getNoOfSnoozesLabel(
-            alarm.noOfSnoozes
+        (SnoozeUtils.getSnoozeDurationLabel(alarmForm.snoozeDuration) + ", " + SnoozeUtils.getNoOfSnoozesLabel(
+            alarmForm.noOfSnoozes
         )).also { tvSnoozeDuration.text = it }
 
         val llSnoozeDurationField = fragmentView.findViewById<LinearLayout>(R.id.llSnoozeDurationField)
@@ -166,8 +161,8 @@ class AlarmFormFragment : Fragment() {
                 override fun cancel() {}
 
                 override fun dismiss() {
-                    (SnoozeUtils.getSnoozeDurationLabel(alarm.snoozeDuration) + ", " + SnoozeUtils.getNoOfSnoozesLabel(
-                        alarm.noOfSnoozes
+                    (SnoozeUtils.getSnoozeDurationLabel(alarmForm.snoozeDuration) + ", " + SnoozeUtils.getNoOfSnoozesLabel(
+                        alarmForm.noOfSnoozes
                     )).also { tvSnoozeDuration.text = it }
                 }
             }
@@ -183,7 +178,6 @@ class AlarmFormFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
         R.id.action_save -> {
             alarmsViewModel.save()
-            alarmsViewModel.alarmFormLiveData.value = Alarm()
             findNavController().popBackStack()
             true
         }

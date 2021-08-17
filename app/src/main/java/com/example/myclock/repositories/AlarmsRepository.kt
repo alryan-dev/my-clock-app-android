@@ -13,6 +13,7 @@ class AlarmsRepository @Inject constructor(
     }
 
     suspend fun save(alarm: Alarm) {
-        alarmDao.save(alarm)
+        if (alarm.id > 0) alarmDao.update(alarm)
+        else alarmDao.insert(alarm)
     }
 }

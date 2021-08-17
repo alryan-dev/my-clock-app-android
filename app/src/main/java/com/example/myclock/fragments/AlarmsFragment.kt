@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -16,9 +18,9 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class AlarmsFragment : Fragment() {
-    @Inject lateinit var alarmsRvAdapter: AlarmsRvAdapter
     private val alarmsViewModel: AlarmsViewModel by activityViewModels()
-    private var alarmsList = mutableListOf<Alarm>()
+    private val alarmsList = mutableListOf<Alarm>()
+    private lateinit var alarmsRvAdapter: AlarmsRvAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -45,10 +47,14 @@ class AlarmsFragment : Fragment() {
         rvAlarms.addItemDecoration(DividerItemDecoration(context, LinearLayoutManager.VERTICAL))
 
         // Set up adapter
-        context?.let {
-            alarmsRvAdapter.alarmsList = alarmsList
-            rvAlarms.adapter = alarmsRvAdapter
-        }
+        alarmsRvAdapter = AlarmsRvAdapter(alarmsList, object : AlarmsRvAdapter.OnItemSelectListener {
+            override fun onItemClick(position: Int) {
+                alarmsViewModel.alarmFormLiveData.value = alarmsList[position]
+                val action = AlarmsFragmentDirections.actionAlarmsFragmentToAlarmFormFragment()
+                findNavController().navigate(action)
+            }
+        })
+        rvAlarms.adapter = alarmsRvAdapter
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

@@ -2,6 +2,7 @@ package com.example.myclock.activities
 
 import android.os.Bundle
 import android.view.MenuItem
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.navigation.NavController
@@ -11,12 +12,15 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.onNavDestinationSelected
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.example.myclock.R
+import com.example.myclock.models.Alarm
+import com.example.myclock.viewmodels.AlarmsViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class AlarmsActivity2 : AppCompatActivity() {
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var navController: NavController
+    private val alarmsViewModel: AlarmsViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,6 +45,9 @@ class AlarmsActivity2 : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.action_alarms_fragment_to_alarm_form_fragment) {
+            alarmsViewModel.alarmFormLiveData.value = Alarm()
+        }
         return item.onNavDestinationSelected(navController) || super.onOptionsItemSelected(item)
     }
 

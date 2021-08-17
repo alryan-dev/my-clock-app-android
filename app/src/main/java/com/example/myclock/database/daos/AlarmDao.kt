@@ -1,9 +1,6 @@
 package com.example.myclock.database.daos
 
-import androidx.room.Dao
-import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.Query
+import androidx.room.*
 import com.example.myclock.models.Alarm
 import kotlinx.coroutines.flow.Flow
 
@@ -13,7 +10,10 @@ interface AlarmDao {
     fun load(): Flow<List<Alarm>>
 
     @Insert
-    suspend fun save(alarm: Alarm)
+    suspend fun insert(alarm: Alarm)
+
+    @Update
+    suspend fun update(alarm: Alarm)
 
     @Delete
     fun delete(user: Alarm)

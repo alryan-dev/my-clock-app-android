@@ -12,8 +12,10 @@ class Converters {
         val sdf = SimpleDateFormat("hh:mm a", Locale.ENGLISH)
         return value?.let {
             val calendar = Calendar.getInstance()
-            calendar.time = sdf.parse(it)
-            calendar
+            sdf.parse(it)?.let { date ->
+                calendar.time = date
+                calendar
+            }
         }
     }
 

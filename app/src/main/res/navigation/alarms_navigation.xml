@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/nav_graph"
+    android:id="@+id/navGraph"
     app:startDestination="@id/alarmsFragment">
 
     <fragment
@@ -12,7 +12,7 @@
         android:label="Alarms"
         tools:layout="@layout/fragment_alarms">
         <action
-            android:id="@+id/action_alarmsFragment_to_alarmFormFragment"
+            android:id="@+id/action_alarms_fragment_to_alarm_form_fragment"
             app:destination="@id/alarmFormFragment" />
     </fragment>
 
@@ -21,10 +21,6 @@
         android:name="com.example.myclock.fragments.AlarmFormFragment"
         android:label="Add Alarm"
         tools:layout="@layout/fragment_alarm_form">
-        <argument
-            android:name="alarmId"
-            android:defaultValue="0"
-            app:argType="integer" />
     </fragment>
 
 </navigation>

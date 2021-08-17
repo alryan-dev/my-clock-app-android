@@ -67,7 +67,7 @@ class AlarmsActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
-        R.id.action_alarmsFragment_to_alarmFormFragment -> {
+        R.id.action_alarms_fragment_to_alarm_form_fragment -> {
             val intent = Intent(this, AlarmFormActivity::class.java)
             startForResult.launch(intent)
             true

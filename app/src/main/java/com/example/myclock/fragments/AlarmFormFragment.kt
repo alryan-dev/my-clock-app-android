@@ -1,6 +1,10 @@
 package com.example.myclock.fragments
 
+import android.app.AlarmManager
+import android.app.PendingIntent
+import android.content.Context
 import android.content.DialogInterface
+import android.content.Intent
 import android.os.Bundle
 import android.view.*
 import android.widget.LinearLayout
@@ -8,6 +12,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import com.example.myclock.AlarmReceiver
 import com.example.myclock.R
 import com.example.myclock.dialogs.LabelInputDialog
 import com.example.myclock.dialogs.RepeatInputDialog
@@ -20,7 +25,6 @@ import com.example.myclock.viewmodels.AlarmsViewModel
 import com.google.android.material.switchmaterial.SwitchMaterial
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
-import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
 
@@ -29,6 +33,8 @@ class AlarmFormFragment : Fragment() {
     private val alarmsViewModel: AlarmsViewModel by activityViewModels()
     private lateinit var alarmForm: Alarm
     private lateinit var fragmentView: View
+    private lateinit var alarmManager: AlarmManager
+    private lateinit var alarmIntent: PendingIntent
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,6 +42,7 @@ class AlarmFormFragment : Fragment() {
     ): View {
         fragmentView = inflater.inflate(R.layout.fragment_alarm_form, container, false)
         setHasOptionsMenu(true)
+        initAlarmManager()
 
         alarmsViewModel.alarmFormLiveData.value?.let { alarmForm = it }
         alarmsViewModel.alarmFormLiveData.observe(viewLifecycleOwner, { alarmForm = it })
@@ -48,6 +55,12 @@ class AlarmFormFragment : Fragment() {
         initSnoozeField()
 
         return fragmentView
+    }
+
+    private fun initAlarmManager() {
+        context?.let {
+            alarmManager = it.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        }
     }
 
     private fun initTimeField() {
@@ -152,7 +165,8 @@ class AlarmFormFragment : Fragment() {
             alarmForm.noOfSnoozes
         )).also { tvSnoozeDuration.text = it }
 
-        val llSnoozeDurationField = fragmentView.findViewById<LinearLayout>(R.id.llSnoozeDurationField)
+        val llSnoozeDurationField =
+            fragmentView.findViewById<LinearLayout>(R.id.llSnoozeDurationField)
         llSnoozeDurationField.setOnClickListener {
             val snoozeInputDialog = SnoozeInputDialog()
             snoozeInputDialog.isCancelable = false
@@ -178,6 +192,27 @@ class AlarmFormFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
         R.id.action_save -> {
             alarmsViewModel.save()
+
+            val alarmTime = Calendar.getInstance().apply {
+                timeInMillis = System.currentTimeMillis()
+                set(Calendar.HOUR_OF_DAY, alarmForm.time.get(Calendar.HOUR_OF_DAY))
+                set(Calendar.MINUTE, alarmForm.time.get(Calendar.MINUTE))
+                set(Calendar.SECOND, 0)
+            }
+
+            alarmIntent = Intent(context, AlarmReceiver::class.java).let { intent ->
+                intent.putExtra("alarm_id", alarmForm.id)
+                intent.putExtra("alarm_label", alarmForm.label)
+                intent.putExtra("alarm_time", Utility.timeToString(alarmForm.time))
+                PendingIntent.getBroadcast(context, 1, intent, 0)
+            }
+
+            alarmManager.setExact(
+                AlarmManager.RTC_WAKEUP,
+                alarmTime.timeInMillis,
+                alarmIntent
+            )
+
             findNavController().popBackStack()
             true
         }

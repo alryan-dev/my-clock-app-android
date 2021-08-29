@@ -3,6 +3,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.myclock">
 
+    <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
+
     <application
         android:name=".MyApplication"
         android:allowBackup="true"
@@ -11,9 +13,22 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MyClock">
+        <receiver
+            android:name=".AlarmReceiver"
+            android:enabled="true"
+            android:exported="true">
+        </receiver>
+
+        <activity
+            android:name=".activities.AlarmDisplayActivity"
+            android:launchMode="singleTask"
+            android:taskAffinity=""
+            android:excludeFromRecents="true">
+        </activity>
         <activity android:name=".activities.AlarmsActivity2">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -21,9 +36,11 @@
             android:name=".activities.AlarmFormActivity"
             android:parentActivityName=".activities.AlarmsActivity">
         </activity>
-        <activity android:name=".activities.AlarmsActivity">
+        <activity
+            android:name=".activities.AlarmsActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

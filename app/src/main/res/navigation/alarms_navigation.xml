@@ -21,6 +21,33 @@
         android:name="com.example.myclock.fragments.AlarmFormFragment"
         android:label="Add Alarm"
         tools:layout="@layout/fragment_alarm_form">
+        <action
+            android:id="@+id/action_alarmFormFragment_to_repeatInputDialog"
+            app:destination="@id/repeatInputDialog" />
+        <action
+            android:id="@+id/action_alarmFormFragment_to_labelInputDialog"
+            app:destination="@id/labelInputDialog" />
+        <action
+            android:id="@+id/action_alarmFormFragment_to_ringDurationInputDialog"
+            app:destination="@id/ringDurationInputDialog" />
+        <action
+            android:id="@+id/action_alarmFormFragment_to_snoozeInputDialog"
+            app:destination="@id/snoozeInputDialog" />
     </fragment>
 
+    <dialog
+        android:id="@+id/repeatInputDialog"
+        android:name="com.example.myclock.dialogs.RepeatInputDialog" />
+
+    <dialog
+        android:id="@+id/labelInputDialog"
+        android:name="com.example.myclock.dialogs.LabelInputDialog" />
+
+    <dialog
+        android:id="@+id/ringDurationInputDialog"
+        android:name="com.example.myclock.dialogs.RingDurationInputDialog" />
+
+    <dialog
+        android:id="@+id/snoozeInputDialog"
+        android:name="com.example.myclock.dialogs.SnoozeInputDialog" />
 </navigation>

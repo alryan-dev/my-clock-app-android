@@ -1,22 +1,21 @@
 package com.example.myclock.dialogs
 
 import android.app.Dialog
-import android.content.DialogInterface
 import android.os.Bundle
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
+import com.example.myclock.models.Alarm
 import com.example.myclock.utilities.Utility
 import com.example.myclock.viewmodels.AlarmsViewModel
 
 class RingDurationInputDialog : DialogFragment() {
     private val alarmsViewModel: AlarmsViewModel by activityViewModels()
-    lateinit var dialogInterface: DialogInterface
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val alarm = alarmsViewModel.alarmFormLiveData.value
-        val checkedItem = when (alarm?.ringDuration) {
+        val alarm = Alarm.copy(alarmsViewModel.selectedAlarm.value)
+        val checkedItem = when (alarm.ringDuration) {
             1 -> 0
             5 -> 1
             10 -> 2
@@ -33,7 +32,7 @@ class RingDurationInputDialog : DialogFragment() {
                     Utility.durations,
                     checkedItem
                 ) { _, which ->
-                    alarm?.ringDuration = when (which) {
+                    alarm.ringDuration = when (which) {
                         0 -> 1
                         1 -> 5
                         2 -> 10
@@ -41,6 +40,7 @@ class RingDurationInputDialog : DialogFragment() {
                         4 -> 20
                         else -> 30
                     }
+                    alarmsViewModel.selectedAlarm.value = alarm
                     dismiss()
                 }
                 .setNegativeButton("CANCEL", null)
@@ -51,14 +51,8 @@ class RingDurationInputDialog : DialogFragment() {
 
     override fun onResume() {
         super.onResume()
-
         // Set dialog width to screen width
         val window = dialog?.window
         window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-    }
-
-    override fun onDismiss(dialog: DialogInterface) {
-        super.onDismiss(dialog)
-        dialogInterface.dismiss()
     }
 }

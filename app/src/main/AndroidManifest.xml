@@ -3,6 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.myclock">
 
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
     <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
 
     <application
@@ -21,26 +22,16 @@
 
         <activity
             android:name=".activities.AlarmDisplayActivity"
+            android:excludeFromRecents="true"
+            android:exported="true"
             android:launchMode="singleTask"
-            android:taskAffinity=""
-            android:excludeFromRecents="true">
-        </activity>
-        <activity android:name=".activities.AlarmsActivity2">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            android:taskAffinity="">
         </activity>
         <activity
-            android:name=".activities.AlarmFormActivity"
-            android:parentActivityName=".activities.AlarmsActivity">
-        </activity>
-        <activity
-            android:name=".activities.AlarmsActivity">
+            android:name=".activities.AlarmsActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

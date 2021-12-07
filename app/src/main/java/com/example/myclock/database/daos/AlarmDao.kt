@@ -6,15 +6,15 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface AlarmDao {
-    @Query("SELECT * FROM alarm")
-    fun load(): Flow<List<Alarm>>
+    @Query("SELECT * FROM alarm ORDER BY time DESC")
+    suspend fun load(): List<Alarm>
 
     @Insert
-    suspend fun insert(alarm: Alarm)
+    suspend fun insert(alarm: Alarm): Long
 
     @Update
     suspend fun update(alarm: Alarm)
 
     @Delete
-    fun delete(user: Alarm)
+    suspend fun delete(user: Alarm)
 }

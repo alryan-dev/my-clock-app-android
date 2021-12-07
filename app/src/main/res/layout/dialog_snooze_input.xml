@@ -1,141 +1,146 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
-
-    <LinearLayout style="@style/SnoozeInputFieldLayoutStyle">
-
-        <TextView
-            style="@style/SnoozeInputFieldTextViewStyle"
-            android:text="@string/label_snooze_duration_min" />
-
-        <com.google.android.material.slider.Slider
-            android:id="@+id/sSnoozeDuration"
-            style="@style/SnoozeInputFieldSliderStyle"
-            android:stepSize="5.0"
-            android:valueFrom="0.0"
-            android:valueTo="25.0" />
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            style="@style/SnoozeInputFieldSliderLabelsLayoutStyle">
-
-            <TextView
-                android:id="@+id/tv5"
-                style="@style/SnoozeInputFieldSliderLabelStyle"
-                android:text="@string/label_5"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/tv10"
-                style="@style/SnoozeInputFieldSliderLabelStyle"
-                android:text="@string/label_10"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toRightOf="@id/tv5"
-                app:layout_constraintRight_toLeftOf="@id/tv15"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/tv15"
-                style="@style/SnoozeInputFieldSliderLabelStyle"
-                android:text="@string/label_15"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toRightOf="@id/tv10"
-                app:layout_constraintRight_toLeftOf="@id/tv20"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/tv20"
-                style="@style/SnoozeInputFieldSliderLabelStyle"
-                android:text="@string/label_20"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toRightOf="@id/tv15"
-                app:layout_constraintRight_toLeftOf="@id/tv25"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/tv25"
-                style="@style/SnoozeInputFieldSliderLabelStyle"
-                android:text="@string/label_25"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toRightOf="@id/tv20"
-                app:layout_constraintRight_toLeftOf="@id/tv30"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/tv30"
-                style="@style/SnoozeInputFieldSliderLabelStyle"
-                android:text="@string/label_30"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-    </LinearLayout>
-
-    <View
-        style="@style/MyDividerStyle"
-        android:layout_marginStart="0dp"
-        android:layout_marginEnd="0dp" />
+<layout>
+    <data>
+        <import type="com.example.myclock.utilities.SnoozeUtils" />
+        <variable
+            name="snoozeDurationValue"
+            type="Float" />
+        <variable
+            name="noOfSnoozesValue"
+            type="Float" />
+    </data>
 
     <LinearLayout
-        style="@style/SnoozeInputFieldLayoutStyle">
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
-        <TextView
-            style="@style/SnoozeInputFieldTextViewStyle"
-            android:text="@string/label_number_of_snoozes" />
-
-        <com.google.android.material.slider.Slider
-            android:id="@+id/sNoOfSnoozes"
-            style="@style/SnoozeInputFieldSliderStyle"
-            android:stepSize="4"
-            android:valueFrom="0.0"
-            android:valueTo="12" />
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            style="@style/SnoozeInputFieldSliderLabelsLayoutStyle">
-
+        <LinearLayout style="@style/SnoozeInputFieldLayoutStyle">
             <TextView
-                android:id="@+id/tvSnoozeNo1"
-                style="@style/SnoozeInputFieldSliderLabelStyle"
-                android:text="@string/label_1"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                style="@style/SnoozeInputFieldTextViewStyle"
+                android:text="@string/label_snooze_duration_min" />
 
+            <com.google.android.material.slider.Slider
+                android:id="@+id/sSnoozeDuration"
+                style="@style/SnoozeInputFieldSliderStyle"
+                android:stepSize="5.0"
+                android:value="@={snoozeDurationValue}"
+                android:valueFrom="0.0"
+                android:valueTo="25.0" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                style="@style/SnoozeInputFieldSliderLabelsLayoutStyle">
+                <TextView
+                    android:id="@+id/tv5"
+                    style="@style/SnoozeInputFieldSliderLabelStyle"
+                    android:text="@string/label_5"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tv10"
+                    style="@style/SnoozeInputFieldSliderLabelStyle"
+                    android:text="@string/label_10"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toRightOf="@id/tv5"
+                    app:layout_constraintRight_toLeftOf="@id/tv15"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tv15"
+                    style="@style/SnoozeInputFieldSliderLabelStyle"
+                    android:text="@string/label_15"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toRightOf="@id/tv10"
+                    app:layout_constraintRight_toLeftOf="@id/tv20"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tv20"
+                    style="@style/SnoozeInputFieldSliderLabelStyle"
+                    android:text="@string/label_20"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toRightOf="@id/tv15"
+                    app:layout_constraintRight_toLeftOf="@id/tv25"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tv25"
+                    style="@style/SnoozeInputFieldSliderLabelStyle"
+                    android:text="@string/label_25"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toRightOf="@id/tv20"
+                    app:layout_constraintRight_toLeftOf="@id/tv30"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tv30"
+                    style="@style/SnoozeInputFieldSliderLabelStyle"
+                    android:text="@string/label_30"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </LinearLayout>
+
+        <View
+            style="@style/MyDividerStyle"
+            android:layout_marginStart="0dp"
+            android:layout_marginEnd="0dp" />
+
+        <LinearLayout style="@style/SnoozeInputFieldLayoutStyle">
             <TextView
-                android:id="@+id/tvSnoozeNo3"
-                style="@style/SnoozeInputFieldSliderLabelStyle"
-                android:text="@string/label_3"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toRightOf="@id/tvSnoozeNo1"
-                app:layout_constraintRight_toLeftOf="@id/tvSnoozeNo5"
-                app:layout_constraintTop_toTopOf="parent" />
+                style="@style/SnoozeInputFieldTextViewStyle"
+                android:text="@string/label_number_of_snoozes" />
 
-            <TextView
-                android:id="@+id/tvSnoozeNo5"
-                style="@style/SnoozeInputFieldSliderLabelStyle"
-                android:text="@string/label_5"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toRightOf="@id/tvSnoozeNo3"
-                app:layout_constraintRight_toLeftOf="@id/tvSnoozeNo10"
-                app:layout_constraintTop_toTopOf="parent" />
+            <com.google.android.material.slider.Slider
+                android:id="@+id/sNoOfSnoozes"
+                style="@style/SnoozeInputFieldSliderStyle"
+                android:stepSize="4"
+                android:value="@={noOfSnoozesValue}"
+                android:valueFrom="0.0"
+                android:valueTo="12" />
 
-            <TextView
-                android:id="@+id/tvSnoozeNo10"
-                style="@style/SnoozeInputFieldSliderLabelStyle"
-                android:text="@string/label_10"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                style="@style/SnoozeInputFieldSliderLabelsLayoutStyle">
+                <TextView
+                    android:id="@+id/tvSnoozeNo1"
+                    style="@style/SnoozeInputFieldSliderLabelStyle"
+                    android:text="@string/label_1"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                <TextView
+                    android:id="@+id/tvSnoozeNo3"
+                    style="@style/SnoozeInputFieldSliderLabelStyle"
+                    android:text="@string/label_3"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toRightOf="@id/tvSnoozeNo1"
+                    app:layout_constraintRight_toLeftOf="@id/tvSnoozeNo5"
+                    app:layout_constraintTop_toTopOf="parent" />
 
+                <TextView
+                    android:id="@+id/tvSnoozeNo5"
+                    style="@style/SnoozeInputFieldSliderLabelStyle"
+                    android:text="@string/label_5"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toRightOf="@id/tvSnoozeNo3"
+                    app:layout_constraintRight_toLeftOf="@id/tvSnoozeNo10"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tvSnoozeNo10"
+                    style="@style/SnoozeInputFieldSliderLabelStyle"
+                    android:text="@string/label_10"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
     </LinearLayout>
-
-</LinearLayout>
+</layout>

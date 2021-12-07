@@ -8,23 +8,19 @@ import java.util.*
 
 class Converters {
     @TypeConverter
-    fun stringToDateTime(value: String?): Calendar? {
-        val sdf = SimpleDateFormat("hh:mm a", Locale.ENGLISH)
+    fun fromTimestamp(value: Long?): Calendar? {
         return value?.let {
-            val calendar = Calendar.getInstance()
-            sdf.parse(it)?.let { date ->
-                calendar.time = date
-                calendar
+            Calendar.getInstance().apply {
+                timeInMillis = value
             }
         }
     }
 
     @TypeConverter
-    fun dateTimeToString(calendar: Calendar?): String {
-        return calendar?.let {
-            Utility.timeToString(it)
-        } ?: ""
+    fun dateToTimestamp(calendar: Calendar?): Long? {
+        return calendar?.timeInMillis
     }
+
     @TypeConverter
     fun stringToBooleanArray(value: String?): BooleanArray? {
         return value?.let {

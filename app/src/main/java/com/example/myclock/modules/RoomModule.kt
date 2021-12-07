@@ -18,9 +18,7 @@ object RoomModule {
     @Singleton
     @Provides
     fun provideDatabase(@ApplicationContext context: Context): AppDatabase {
-        return Room.databaseBuilder(
-            context, AppDatabase::class.java, "myclockdb"
-        ).enableMultiInstanceInvalidation().build()
+        return Room.databaseBuilder(context, AppDatabase::class.java, "myclockdb").build()
     }
 
     @Provides

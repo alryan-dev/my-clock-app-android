@@ -3,6 +3,7 @@
     <AndroidXmlCodeStyleSettings>
       <option name="LAYOUT_SETTINGS">
         <value>
+          <option name="INSERT_BLANK_LINE_BEFORE_TAG" value="false" />
           <option name="INSERT_LINE_BREAK_BEFORE_NAMESPACE_DECLARATION" value="true" />
         </value>
       </option>
@@ -147,9 +148,6 @@
     </codeStyleSettings>
     <codeStyleSettings language="kotlin">
       <option name="CODE_STYLE_DEFAULTS" value="KOTLIN_OFFICIAL" />
-      <option name="LINE_COMMENT_AT_FIRST_COLUMN" value="false" />
-      <option name="BLOCK_COMMENT_AT_FIRST_COLUMN" value="false" />
-      <option name="LINE_COMMENT_ADD_SPACE" value="true" />
     </codeStyleSettings>
   </code_scheme>
 </component>

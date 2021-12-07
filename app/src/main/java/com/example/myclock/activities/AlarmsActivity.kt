@@ -1,77 +1,69 @@
 package com.example.myclock.activities
 
-import android.app.Activity
-import android.content.Intent
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuInflater
 import android.view.MenuItem
-import androidx.activity.result.ActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import androidx.navigation.NavController
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.navigateUp
+import androidx.navigation.ui.onNavDestinationSelected
+import androidx.navigation.ui.setupActionBarWithNavController
 import com.example.myclock.R
-import com.example.myclock.adapters.AlarmsRvAdapter
+import com.example.myclock.databinding.ActivityAlarmsBinding
+import com.example.myclock.factories.AlarmsViewModelFactory
 import com.example.myclock.models.Alarm
+import com.example.myclock.repositories.AlarmsRepository
 import com.example.myclock.viewmodels.AlarmsViewModel
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class AlarmsActivity : AppCompatActivity() {
-    private var alarmsList = mutableListOf<Alarm>()
-    private lateinit var alarmsRvAdapter: AlarmsRvAdapter
-    private val alarmsViewModel: AlarmsViewModel by viewModels()
-    private val startForResult =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
-            if (result.resultCode == Activity.RESULT_OK) {
-                val data = result.data
-                if (data != null) {
-                    val alarm = data.getParcelableExtra<Alarm>("ALARM")
-                    alarm?.let {
-                        alarmsList.add(it)
-                        alarmsRvAdapter.notifyDataSetChanged()
-                    }
-                }
-            }
-        }
+    private lateinit var appBarConfiguration: AppBarConfiguration
+    private lateinit var navController: NavController
+    lateinit var binding: ActivityAlarmsBinding
+
+    @Inject
+    lateinit var alarmsRepository: AlarmsRepository
+    private val alarmsViewModel: AlarmsViewModel by viewModels {
+        AlarmsViewModelFactory(alarmsRepository, application)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_alarms)
-        initAlarmsRecyclerView()
-        alarmsViewModel.alarmsLiveData.observe(this, {
-            alarmsList.addAll(it)
-            alarmsRvAdapter.notifyDataSetChanged()
-        })
-
-        // Init toolbar
-        setSupportActionBar(findViewById(R.id.tbAlarms))
-        supportActionBar?.title = "Alarms"
+        binding = ActivityAlarmsBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        setUpToolbar()
     }
 
-    private fun initAlarmsRecyclerView() {
-        // Init recyclerview
-        val rvAlarms = findViewById<RecyclerView>(R.id.rvAlarms)
-        rvAlarms.layoutManager = LinearLayoutManager(this)
-        rvAlarms.addItemDecoration(DividerItemDecoration(this, LinearLayoutManager.VERTICAL))
+    private fun setUpToolbar() {
+        setSupportActionBar(binding.tbAlarms)
 
-        // Init adapter
-        rvAlarms.adapter = alarmsRvAdapter
-    }
+        // Set up navigation
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as NavHostFragment
+        navController = navHostFragment.navController
+        appBarConfiguration = AppBarConfiguration(navController.graph)
+        setupActionBarWithNavController(navController, appBarConfiguration)
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        val inflater: MenuInflater = menuInflater
-        inflater.inflate(R.menu.menu_alarms, menu)
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
-        R.id.action_alarms_fragment_to_alarm_form_fragment -> {
-            val intent = Intent(this, AlarmFormActivity::class.java)
-            startForResult.launch(intent)
-            true
+        // Check current destination
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            if (destination.id == R.id.alarmFormFragment) {
+                binding.tbAlarms.setNavigationIcon(R.drawable.ic_close)
+            }
         }
-        else -> super.onOptionsItemSelected(item)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.action_alarms_fragment_to_alarm_form_fragment) {
+            alarmsViewModel.selectedAlarm.value = Alarm()
+        }
+        return item.onNavDestinationSelected(navController) || super.onOptionsItemSelected(item)
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
 }

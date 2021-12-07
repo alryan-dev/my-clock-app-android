@@ -1,49 +1,70 @@
 package com.example.myclock.adapters
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-import androidx.navigation.findNavController
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
-import com.example.myclock.R
-import com.example.myclock.fragments.AlarmsFragmentDirections
+import com.example.myclock.BR
+import com.example.myclock.databinding.ItemAlarmBinding
 import com.example.myclock.models.Alarm
 import com.example.myclock.utilities.Utility
-import javax.inject.Inject
 
 class AlarmsRvAdapter constructor(
     private var alarmsList: List<Alarm>,
-    private val onItemSelectListener: OnItemSelectListener
+    private val onItemSelectListener: OnItemSelectListener,
+    private val onItemEnabledListener: OnItemUpdateListener,
+    private val lifecycleOwner: LifecycleOwner,
 ) :
     RecyclerView.Adapter<AlarmsRvAdapter.ViewHolder>() {
 
-    class ViewHolder(view: View, onItemSelectListener: OnItemSelectListener) : RecyclerView.ViewHolder(view) {
-        val tvTime: TextView = view.findViewById(R.id.tvTime)
-        val tvLabel: TextView = view.findViewById(R.id.tvLabel)
-
+    class ViewHolder(
+        val binding: ItemAlarmBinding,
+        onItemSelectListener: OnItemSelectListener,
+    ) :
+        RecyclerView.ViewHolder(binding.root) {
         init {
-            view.setOnClickListener {
+            binding.root.setOnClickListener {
                 val currentPosition = bindingAdapterPosition
                 if (currentPosition != RecyclerView.NO_POSITION) {
-                    onItemSelectListener.onItemClick(currentPosition)
+                    onItemSelectListener.onItemSelect(currentPosition)
                 }
             }
         }
     }
 
     interface OnItemSelectListener {
-        fun onItemClick(position: Int)
+        fun onItemSelect(position: Int)
+    }
+
+    interface OnItemUpdateListener {
+        fun onItemUpdate(any: Any, position: Int)
     }
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(viewGroup.context).inflate(R.layout.item_alarm, viewGroup, false)
-        return ViewHolder(view, onItemSelectListener)
+        val binding =
+            ItemAlarmBinding.inflate(LayoutInflater.from(viewGroup.context), viewGroup, false)
+        return ViewHolder(binding, onItemSelectListener)
     }
 
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
-        viewHolder.tvTime.text = Utility.timeToString(alarmsList[position].time)
-        viewHolder.tvLabel.text = alarmsList[position].label
+        Utility.print(alarmsList[position].time.timeInMillis.toString())
+        val enabled = MutableLiveData(alarmsList[position].enabled)
+
+        enabled.observe(lifecycleOwner, {
+            viewHolder.binding.smEnabled.postOnAnimation {
+                val currentPosition = viewHolder.bindingAdapterPosition
+                if (currentPosition != RecyclerView.NO_POSITION && it != alarmsList[currentPosition].enabled) {
+                    alarmsList[currentPosition].enabled = it
+                    onItemEnabledListener.onItemUpdate(alarmsList[currentPosition], currentPosition)
+                }
+            }
+        })
+
+        viewHolder.binding.setVariable(BR.alarm, alarmsList[position])
+        viewHolder.binding.setVariable(BR.enabled, enabled)
+        viewHolder.binding.lifecycleOwner = lifecycleOwner
+        viewHolder.binding.executePendingBindings()
     }
 
     override fun getItemCount(): Int = alarmsList.size
